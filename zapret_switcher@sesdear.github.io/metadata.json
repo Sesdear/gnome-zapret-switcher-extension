@@ -1,0 +1,10 @@
+{
+    "uuid": "zapret-switcher@sesdear.github.io",
+    "name": "Zapret Switcher",
+    "description": "Кнопка вкл/выкл сервиса в System Status Area",
+    "version": 1,
+    "shell-version": ["47", "48"],
+    "url": "https://github.com/sesdear/gnome-zapret-switcher-extension",
+    "settings-schema": "org.gnome.shell.extensions.zapret-switcher",
+    "gettext-domain": "zapret-switcher@sesdear.github.io"
+}
