@@ -5,17 +5,17 @@ import GLib from 'gi://GLib';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import * as ExtensionUtils from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class ZapretSwitcherExtension extends Extension {
+
     enable() {
         this._button = new PanelMenu.Button(0.0, 'ZapretSwitcher');
-        this.Me = ExtensionUtils.getCurrentExtension();
-        
+
         this._icon = new St.Icon({
-            icon_size: '24',
+            icon_size: 18,
             style_class: 'system-status-icon',
         });
+
         this._button.add_child(this._icon);
 
         this._switchItem = new PopupMenu.PopupSwitchMenuItem('Zapret', false);
@@ -24,7 +24,7 @@ export default class ZapretSwitcherExtension extends Extension {
         });
 
         this._button.menu.addMenuItem(this._switchItem);
-        
+
         Main.panel.addToStatusArea('zapret-switcher', this._button);
 
         this.updateState();
@@ -37,21 +37,17 @@ export default class ZapretSwitcherExtension extends Extension {
     }
 
     updateState() {
-
-        GLib.spawn_command_line_async('systemctl is-active --quiet zapret', 
+        GLib.spawn_command_line_async('systemctl is-active --quiet zapret',
             (success) => {
-                const active = success;
+                const active = (success === 0);
                 this._switchItem.setToggleState(active);
                 this.updateIcon(active);
             });
     }
 
     updateIcon(active) {
-        if (active) {
-            this._icon.gicon = Gio.icon_new_for_string(`${this.Me.path}/icons/logo-on.svg`);
-        } else {
-            this._icon.gicon = Gio.icon_new_for_string(`${this.Me.path}/icons/logo-off.svg`);
-        }
+        const iconName = active ? 'logo-on.svg' : 'logo-off.svg';
+        this._icon.gicon = Gio.icon_new_for_string(`${this.path}/icons/${iconName}`);
     }
 
     disable() {
